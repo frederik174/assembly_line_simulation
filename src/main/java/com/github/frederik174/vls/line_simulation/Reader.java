@@ -99,14 +99,14 @@ public class Reader {
 
         readerLocation.set("coordinates",readerCoordinates);
         reader.set("location",readerLocation);
-
+/*
         reader.put("model", "standard-reader");
         reader.put("software-version", "version-1.0");
         reader.put("serial-number", "s0x123456789");
         reader.put("mac-address", "00:3x:c1:c4:5d:df");
         reader.put("hostname", "standard-host");
         reader.put("ip-address", "134.169.251.135");
-
+*/
         // Information object
         ObjectNode informationObj = JsonNodeFactory.instance.objectNode();
         informationObj.set("object",obj);
