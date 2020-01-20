@@ -9,13 +9,13 @@ public class AssemblyLine {
 
     // ID for every sub-segment of the line
     public String[] processID;
-    public String[] workSteps;
+    public Integer[] workSteps;
     public Double[][] workStationPositions;
 
     public Vehicle[] vehiclesOnLine;
     private Integer productionNumber;
 
-    AssemblyLine(Double[] referencePoint, String hallID, String[] processID, String[] workSteps, Double[][] workStationPositions, Integer productionNumber){
+    AssemblyLine(Double[] referencePoint, String hallID, String[] processID, Integer[] workSteps, Double[][] workStationPositions, Integer productionNumber){
         this.referencePoint = referencePoint;
         this.hallID = hallID;
         this.processID = processID;

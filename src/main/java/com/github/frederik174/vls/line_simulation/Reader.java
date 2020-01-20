@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Properties;
 
 public class Reader {
@@ -64,7 +65,7 @@ public class Reader {
         // Object node for vehicle
         ObjectNode obj = JsonNodeFactory.instance.objectNode();
         obj.put("pin", assemblyLine.vehiclesOnLine[cycle].getPin());
-        obj.put("timestamp", Instant.now().toString());
+        obj.put("timestamp", Instant.now().atZone(ZoneId.of("Europe/Berlin")).toString());
 
         ObjectNode process = JsonNodeFactory.instance.objectNode();
         process.put("processID",assemblyLine.processID[cycle]); // ProcessID des Taktes
