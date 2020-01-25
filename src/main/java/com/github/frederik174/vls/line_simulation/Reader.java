@@ -68,19 +68,20 @@ public class Reader {
         obj.put("timestamp", Instant.now().atZone(ZoneId.of("Europe/Berlin")).toString());
 
         ObjectNode process = JsonNodeFactory.instance.objectNode();
-        process.put("processID",assemblyLine.processID[cycle]); // ProcessID des Taktes
-        process.put("workstep", assemblyLine.workSteps[cycle]); // Beschreibung des Arbeitsschrittes in diesem Takt
+        process.put("processID",assemblyLine.processID[cycle]); // Beschreibung des Taktes
+        process.put("workstep", assemblyLine.workSteps[cycle]); // Takt
 
         // EPCIS Business Location
         ObjectNode objLocation = JsonNodeFactory.instance.objectNode();
         objLocation.put("hallID", assemblyLine.hallID);
         objLocation.put("segment", assemblyLine.assemblySegment);
 
-        ArrayNode xyposition = JsonNodeFactory.instance.arrayNode();
-        xyposition.add(assemblyLine.workStationPositions[0][cycle]);
-        xyposition.add(assemblyLine.workStationPositions[1][cycle]);
+        ArrayNode objCoordinates = JsonNodeFactory.instance.arrayNode();
+        Double[] objCoords = calculateGeoCoordinates(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
+        objCoordinates.add(objCoords[0]);
+        objCoordinates.add(objCoords[1]);
 
-        objLocation.set("xy-position",xyposition);
+        objLocation.set("coordinates",objCoordinates);
 
         obj.set("process",process);
         obj.set("location", objLocation);
@@ -94,9 +95,9 @@ public class Reader {
         readerLocation.put("segment", assemblyLine.assemblySegment);
 
         ArrayNode readerCoordinates = JsonNodeFactory.instance.arrayNode();
-        Double[] coords = calculateGeoCoordinates(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
-        readerCoordinates.add(coords[0]);
-        readerCoordinates.add(coords[1]);
+        Double[] readerCoords = calculateGeoCoordinates(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
+        readerCoordinates.add(readerCoords[0]);
+        readerCoordinates.add(readerCoords[1]);
 
         readerLocation.set("coordinates",readerCoordinates);
         reader.set("location",readerLocation);

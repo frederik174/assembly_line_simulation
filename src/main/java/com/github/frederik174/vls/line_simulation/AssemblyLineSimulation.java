@@ -7,8 +7,8 @@ public class AssemblyLineSimulation {
         String topic = "information-objects";
         String hallID = "halle1A";
 
-        String[] processID = {"p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01",
-                "p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01","p01"};
+        String[] processID = {"montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage",
+                "montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","montage","übergabe finish center"};
 
         Integer[] workSteps = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
 
@@ -25,7 +25,8 @@ public class AssemblyLineSimulation {
         AssemblyLine assemblyLine = new AssemblyLine(referencePoint,hallID,processID,workSteps,workStationPositions,productionNumber);
 
         Reader reader01 = new Reader(bootstrapServer,"reader01");
-        //Reader reader02 = new Reader(bootstrapServer,"reader02");
+        Reader reader02 = new Reader(bootstrapServer,"reader02");
+        Reader reader03 = new Reader(bootstrapServer,"reader03");
 
         // Start the simulation
         Integer productionBatch = 0;
@@ -34,9 +35,10 @@ public class AssemblyLineSimulation {
             System.out.println("Production batch:" + productionBatch);
 
             // cycle is represents the "takt" the reader is located in
-            // System.out.println(reader02.identificationObject(assemblyLine,30,topic, reader02.getReaderID(),1));
+             //System.out.println(reader01.identificationObject(assemblyLine,30,topic, reader01.getReaderID(),1));
             reader01.producer.send(reader01.identificationObject(assemblyLine,0,topic, reader01.getReaderID(),0));
-            //reader02.producer.send(reader02.identificationObject(assemblyLine,1,topic, reader02.getReaderID(),1));
+            reader02.producer.send(reader02.identificationObject(assemblyLine,10,topic, reader02.getReaderID(),1));
+            reader02.producer.send(reader03.identificationObject(assemblyLine,30,topic, reader03.getReaderID(),2));
 
             // Shift push vehicles on assembly line forward
             assemblyLine.pushVehiclesOnLine(new Vehicle(assemblyLine.getProductionNumber(),assemblyLine.plantID,assemblyLine.assemblySegment));
@@ -51,6 +53,7 @@ public class AssemblyLineSimulation {
             }
         }
         reader01.producer.close();
-        //reader02.producer.close();
+        reader02.producer.close();
+        reader03.producer.close();
     }
 }

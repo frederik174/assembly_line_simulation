@@ -4,12 +4,12 @@ public class AssemblyLine {
     // zero-reference point [lat,lng] null point for internal position calculation based on
     public Double[] referencePoint;
     public String plantID = "11";
-    public String assemblySegment = "3"; // "Rohbauauflage"
+    public String assemblySegment = "3"; // "Montage-Segment"
     public String hallID;
 
     // ID for every sub-segment of the line
     public String[] processID;
-    public Integer[] workSteps;
+    public Integer[] workSteps; // Takte
     public Double[][] workStationPositions;
 
     public Vehicle[] vehiclesOnLine;
