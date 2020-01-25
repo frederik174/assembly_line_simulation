@@ -25,7 +25,7 @@ public class AssemblyLineSimulation {
         AssemblyLine assemblyLine = new AssemblyLine(referencePoint,hallID,processID,workSteps,workStationPositions,productionNumber);
 
         Reader reader01 = new Reader(bootstrapServer,"reader01");
-        Reader reader02 = new Reader(bootstrapServer,"reader02");
+        //Reader reader02 = new Reader(bootstrapServer,"reader02");
 
         // Start the simulation
         Integer productionBatch = 0;
@@ -36,7 +36,7 @@ public class AssemblyLineSimulation {
             // cycle is represents the "takt" the reader is located in
             // System.out.println(reader02.identificationObject(assemblyLine,30,topic, reader02.getReaderID(),1));
             reader01.producer.send(reader01.identificationObject(assemblyLine,0,topic, reader01.getReaderID(),0));
-            reader02.producer.send(reader02.identificationObject(assemblyLine,1,topic, reader02.getReaderID(),1));
+            //reader02.producer.send(reader02.identificationObject(assemblyLine,1,topic, reader02.getReaderID(),1));
 
             // Shift push vehicles on assembly line forward
             assemblyLine.pushVehiclesOnLine(new Vehicle(assemblyLine.getProductionNumber(),assemblyLine.plantID,assemblyLine.assemblySegment));
@@ -51,6 +51,6 @@ public class AssemblyLineSimulation {
             }
         }
         reader01.producer.close();
-        reader02.producer.close();
+        //reader02.producer.close();
     }
 }

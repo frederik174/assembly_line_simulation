@@ -19,11 +19,11 @@ public class Vehicle {
         // assembly segment
 
         // week
-        Integer productionWeek = (Instant.now().atZone(ZoneId.of("Europe/Berlin")).getDayOfYear() + 1) / 7 +1;
+        String productionWeek = String.format("%02d", ((Instant.now().atZone(ZoneId.of("Europe/Berlin")).getDayOfYear() + 1) / 7 +1));
         // production number (ongoing)
         String prodNumber = String.format("%04d", productionNumber);
 
-        pin = plantID + productionYear.toString() + assemblySegment + productionWeek.toString() + prodNumber;
+        pin = plantID + productionYear.toString() + assemblySegment + productionWeek + prodNumber;
 
         // add a security number
         Integer securityNumber = calculateSecurityNumber(pin);
