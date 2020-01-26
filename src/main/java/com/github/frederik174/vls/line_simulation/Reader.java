@@ -35,30 +35,38 @@ public class Reader {
 
         this.producer = new KafkaProducer<String, String>(config);
     }
-    private static Double[] calculateGeoCoordinates(Double xPos,Double yPos,Double[] referencePoint){
-        // 1- Rotate coordinate system to compensate the angle between plant walls and latitudes
-            double phi = 8.587; // in °
-            double compensatedXDist;
-            double compensatedYDist;
-            if(xPos != 0.0 && yPos != 0.0) {
-                double d = Math.sqrt(xPos * xPos + yPos * yPos);
-                double gamma = Math.asin(xPos / d);
-                compensatedXDist = d * Math.sin(phi + gamma);
-                compensatedYDist = d * Math.cos(phi + gamma);
-            }else{
-                compensatedXDist = 0.0;
-                compensatedYDist = 0.0;
-            }
-        // 2- Transform relative distance to Geo-Coordinates
-            double d0 = 111.3; // distance between latitudes and longitudes around the Equator
-            // calculate latitude
-            double lat2 = referencePoint[0] - (compensatedXDist/d0);
-            // calculate longitude
-            double lat = (referencePoint[0] - lat2) * Math.PI / 360;
-            double lng2 = referencePoint[1] - (compensatedYDist/(d0 * Math.cos(lat)));
+    private static Double[] wayPointProjection(Double xPos,Double yPos,Double[] referencePoint){
+        double dx = xPos / 1000; //[km]
+        double dy = yPos / 1000; //[km]
 
-        Double[] coords = {lat2,lng2};
-        return coords;
+        double lat1 = referencePoint[0]; // latitude of the reference point [°]
+        double lng1 = referencePoint[1]; // longitude of the reference point [°]
+
+        // 1 - Calculate bearing angle
+        double alpha = 90 - 8.587; // angle between latitudes and plant walls in Wolfsburg [°]
+
+        // direct distance between zero-point (reference point in local coordinate system) and target point
+        double d = Math.sqrt(dx * dx + dy * dy);
+        double phi = Math.toDegrees(Math.atan(dy/dx));
+
+        // distance d transformed to the unit sphere
+        d = d / 111.2; //[°] where 1/111.2 is an approximation factor for division by the earth radius transformed from radian to degree
+        alpha = alpha + phi;
+
+        // 2 - Calculate the projected latitude coordinate lat2
+        // lat2 = arcsin(sin(lat1)cos(d) + cos(lat1)sin(d)cos(alpha))
+        double arg = Math.sin(Math.toRadians(lat1))*Math.cos(Math.toRadians(d)) + Math.cos(Math.toRadians(lat1))*Math.sin(Math.toRadians(d))*Math.cos(Math.toRadians(alpha));
+
+        double lat2 = Math.asin(arg);
+        lat2 = Math.toDegrees(lat2);
+
+        // 3 - Calculate the projected longitude coordinate lng2
+        // lng2 = lat1 + arcsin((sin(d)/cos(lat2))*sin(alpha)
+        double sub = Math.toDegrees(Math.asin((Math.sin(Math.toRadians(d))/Math.cos(Math.toRadians(lat2)))*Math.sin(Math.toRadians(alpha))));
+        double lng2 = lng1 + sub;
+
+        Double[] projectedCoords = {lat2,lng2};
+        return projectedCoords;
     }
 
     public static ProducerRecord<String,String> identificationObject(AssemblyLine assemblyLine, Integer cycle, String topic, String readerID, Integer partition){
@@ -77,7 +85,7 @@ public class Reader {
         objLocation.put("segment", assemblyLine.assemblySegment);
 
         ArrayNode objCoordinates = JsonNodeFactory.instance.arrayNode();
-        Double[] objCoords = calculateGeoCoordinates(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
+        Double[] objCoords = wayPointProjection(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
         objCoordinates.add(objCoords[0]);
         objCoordinates.add(objCoords[1]);
 
@@ -95,7 +103,7 @@ public class Reader {
         readerLocation.put("segment", assemblyLine.assemblySegment);
 
         ArrayNode readerCoordinates = JsonNodeFactory.instance.arrayNode();
-        Double[] readerCoords = calculateGeoCoordinates(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
+        Double[] readerCoords = wayPointProjection(assemblyLine.workStationPositions[0][cycle],assemblyLine.workStationPositions[1][cycle],assemblyLine.referencePoint);
         readerCoordinates.add(readerCoords[0]);
         readerCoordinates.add(readerCoords[1]);
 

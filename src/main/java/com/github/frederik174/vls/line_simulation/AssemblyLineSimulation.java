@@ -16,7 +16,7 @@ public class AssemblyLineSimulation {
                 { 0.00, 6.00,12.00,18.00,24.00,30.00,36.00,42.00,48.00,50.00,50.00,48.00,42.00,36.00,30.00,24.00,18.00,12.00, 6.00, 4.00, 4.00, 6.00,12.00,18.00,24.00,30.00,36.00,42.00,48.00,54.00,60.00},
                 { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 4.00, 8.00, 8.00, 8.00, 8.00, 8.00, 8.00, 8.00, 8.00, 8.00,12.00,16.00,16.00,16.00,16.00,16.00,16.00,16.00,16.00,16.00,16.00,16.00}
         };
-        Double[] referencePoint = {52.43019045537872, 10.768661499023438};
+        Double[] referencePoint = {52.432365506153175, 10.768133103847504};
 
         Integer productionNumber = 0;
         Integer cycleTime = 20000; // in milliseconds
@@ -35,7 +35,6 @@ public class AssemblyLineSimulation {
             System.out.println("Production batch:" + productionBatch);
 
             // cycle is represents the "takt" the reader is located in
-             //System.out.println(reader01.identificationObject(assemblyLine,30,topic, reader01.getReaderID(),1));
             reader01.producer.send(reader01.identificationObject(assemblyLine,0,topic, reader01.getReaderID(),0));
             reader02.producer.send(reader02.identificationObject(assemblyLine,10,topic, reader02.getReaderID(),1));
             reader02.producer.send(reader03.identificationObject(assemblyLine,30,topic, reader03.getReaderID(),2));
