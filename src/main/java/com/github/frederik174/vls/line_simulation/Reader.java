@@ -36,37 +36,42 @@ public class Reader {
         this.producer = new KafkaProducer<String, String>(config);
     }
     private static Double[] wayPointProjection(Double xPos,Double yPos,Double[] referencePoint){
-        double dx = xPos / 1000; //[km]
-        double dy = yPos / 1000; //[km]
+        if(xPos != 0.0 || yPos != 0.0){
+            double dx = xPos / 1000; //[km]
+            double dy = yPos / 1000; //[km]
 
-        double lat1 = referencePoint[0]; // latitude of the reference point [°]
-        double lng1 = referencePoint[1]; // longitude of the reference point [°]
+            double lat1 = referencePoint[0]; // latitude of the reference point [°]
+            double lng1 = referencePoint[1]; // longitude of the reference point [°]
 
-        // 1 - Calculate bearing angle
-        double alpha = 90 - 8.587; // angle between latitudes and plant walls in Wolfsburg [°]
+            // 1 - Calculate bearing angle
+            double alpha = 90 - 8.587; // angle between latitudes and plant walls in Wolfsburg [°]
 
-        // direct distance between zero-point (reference point in local coordinate system) and target point
-        double d = Math.sqrt(dx * dx + dy * dy);
-        double phi = Math.toDegrees(Math.atan(dy/dx));
+            // direct distance between zero-point (reference point in local coordinate system) and target point
+            double d = Math.sqrt(dx * dx + dy * dy);
+            double phi = Math.toDegrees(Math.atan(dy/dx));
 
-        // distance d transformed to the unit sphere
-        d = d / 111.2; //[°] where 1/111.2 is an approximation factor for division by the earth radius transformed from radian to degree
-        alpha = alpha + phi;
+            // distance d transformed to the unit sphere
+            d = d / 111.2; //[°] where 1/111.2 is an approximation factor for division by the earth radius transformed from radian to degree
+            alpha = alpha + phi;
 
-        // 2 - Calculate the projected latitude coordinate lat2
-        // lat2 = arcsin(sin(lat1)cos(d) + cos(lat1)sin(d)cos(alpha))
-        double arg = Math.sin(Math.toRadians(lat1))*Math.cos(Math.toRadians(d)) + Math.cos(Math.toRadians(lat1))*Math.sin(Math.toRadians(d))*Math.cos(Math.toRadians(alpha));
+            // 2 - Calculate the projected latitude coordinate lat2
+            // lat2 = arcsin(sin(lat1)cos(d) + cos(lat1)sin(d)cos(alpha))
+            double arg = Math.sin(Math.toRadians(lat1))*Math.cos(Math.toRadians(d)) + Math.cos(Math.toRadians(lat1))*Math.sin(Math.toRadians(d))*Math.cos(Math.toRadians(alpha));
 
-        double lat2 = Math.asin(arg);
-        lat2 = Math.toDegrees(lat2);
+            double lat2 = Math.asin(arg);
+            lat2 = Math.toDegrees(lat2);
 
-        // 3 - Calculate the projected longitude coordinate lng2
-        // lng2 = lat1 + arcsin((sin(d)/cos(lat2))*sin(alpha)
-        double sub = Math.toDegrees(Math.asin((Math.sin(Math.toRadians(d))/Math.cos(Math.toRadians(lat2)))*Math.sin(Math.toRadians(alpha))));
-        double lng2 = lng1 + sub;
+            // 3 - Calculate the projected longitude coordinate lng2
+            // lng2 = lat1 + arcsin((sin(d)/cos(lat2))*sin(alpha)
+            double sub = Math.toDegrees(Math.asin((Math.sin(Math.toRadians(d))/Math.cos(Math.toRadians(lat2)))*Math.sin(Math.toRadians(alpha))));
+            double lng2 = lng1 + sub;
 
-        Double[] projectedCoords = {lat2,lng2};
-        return projectedCoords;
+            Double[] projectedCoords = {lat2,lng2};
+            return projectedCoords;
+        }else{
+            return referencePoint;
+        }
+
     }
 
     public static ProducerRecord<String,String> identificationObject(AssemblyLine assemblyLine, Integer cycle, String topic, String readerID, Integer partition){
