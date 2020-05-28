@@ -26,7 +26,7 @@ public class AssemblyLine {
            cycles[numberOfCycles - n].vehicle = new Vehicle(noOfFirstVeh);
            noOfFirstVeh++;
        }
-       productionCount = noOfFirstVeh-1;
+       productionCount = noOfFirstVeh;
    }
 
     public Vehicle shiftVehiclesForward(Vehicle newVehicle){
