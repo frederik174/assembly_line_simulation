@@ -1,33 +1,33 @@
-package com.github.frederik174.vls.line_simulation;
+package com.github.frederik174.simulation;
 
 
 import java.time.Instant;
 import java.time.ZoneId;
 
 public class Vehicle {
-    private String pin;
+    private int assemblySegment = 3;
+    private String PIN;
+    private String plantID = "11";
 
-    Vehicle(Integer productionNumber, String plantID, String assemblySegment){
-        this.pin = generatePin(productionNumber, plantID, assemblySegment);
+    public Vehicle(int productionNumber){
+        this.PIN = generatePin(productionNumber);
     }
 
-    private String generatePin(Integer productionNumber, String plantID, String assemblySegment){
-        // plant id (2 digits)
-
+    private String generatePin(int productionNumber){
         // production year
         Integer productionYear = Instant.now().atZone(ZoneId.of("Europe/Berlin")).getYear();
-        // assembly segment
 
-        // week
+        // calendar week
         String productionWeek = String.format("%02d", ((Instant.now().atZone(ZoneId.of("Europe/Berlin")).getDayOfYear() + 1) / 7 +1));
         // production number (ongoing)
         String prodNumber = String.format("%04d", productionNumber);
 
-        pin = plantID + productionYear.toString() + assemblySegment + productionWeek + prodNumber;
+        String pin = plantID + productionYear.toString() + assemblySegment + productionWeek + prodNumber;
 
-        // add a security number
+        // security number
         Integer securityNumber = calculateSecurityNumber(pin);
         pin = pin + securityNumber.toString();
+
         return pin;
     }
 
@@ -61,5 +61,5 @@ public class Vehicle {
         return securityNumber;
     }
 
-    public String getPin(){return this.pin;}
+    public String getPin(){return this.PIN;}
 }
