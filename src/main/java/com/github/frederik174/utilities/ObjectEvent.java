@@ -10,7 +10,7 @@ public class ObjectEvent {
     private String eventTimeZoneOffset;
     private ArrayList<epc> epcList;
     private String action;
-    private ArrayList<VIN> ILMD;
+    private ArrayList<vin> ILMD;
     private String bizStep;
     private String disposition;
     private ArrayList<id> readPoint;
@@ -20,7 +20,7 @@ public class ObjectEvent {
     public ObjectEvent(){}
 
     // Custom constructor
-    public ObjectEvent(String eventTime, String eventTimeZoneOffset, ArrayList epcList, String action, ArrayList<VIN> ILMD,
+    public ObjectEvent(String eventTime, String eventTimeZoneOffset, ArrayList epcList, String action, ArrayList<vin> ILMD,
                        String bizStep, String disposition, ArrayList readPoint, ArrayList bizLocation){
         this.eventTime = eventTime;
         this.eventTimeZoneOffset = eventTimeZoneOffset;
@@ -69,11 +69,11 @@ public class ObjectEvent {
     }
 
     @XmlElement
-    public ArrayList<VIN> getILMD() {
+    public ArrayList<vin> getILMD() {
         return ILMD;
     }
 
-    public void setILMD(ArrayList<VIN> ILMD) {
+    public void setILMD(ArrayList<vin> ILMD) {
         this.ILMD = ILMD;
     }
 

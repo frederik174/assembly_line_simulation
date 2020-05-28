@@ -1,9 +1,8 @@
 package com.github.frederik174.simulation;
 
 
-import com.github.frederik174.paramter.LayoutParameter;
-import com.github.frederik174.paramter.SimulationParameter;
-import org.relaxng.datatype.Datatype;
+import com.github.frederik174.parameter.LayoutParameter;
+import com.github.frederik174.parameter.SimulationParameter;
 
 public class Simulation {
 

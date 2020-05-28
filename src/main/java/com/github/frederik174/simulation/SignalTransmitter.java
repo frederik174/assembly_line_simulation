@@ -1,6 +1,6 @@
 package com.github.frederik174.simulation;
 
-import com.github.frederik174.paramter.SimulationParameter;
+import com.github.frederik174.parameter.SimulationParameter;
 import com.github.frederik174.properties.KafkaProperties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 

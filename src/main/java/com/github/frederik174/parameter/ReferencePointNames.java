@@ -1,4 +1,4 @@
-package com.github.frederik174.paramter;
+package com.github.frederik174.parameter;
 
 public enum ReferencePointNames {
     // names of RTLS reference Points etc.

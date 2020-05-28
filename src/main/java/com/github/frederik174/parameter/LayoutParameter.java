@@ -1,4 +1,4 @@
-package com.github.frederik174.paramter;
+package com.github.frederik174.parameter;
 
 public class LayoutParameter {
     public final String PLANT_ID = "12";

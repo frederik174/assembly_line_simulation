@@ -1,9 +1,8 @@
 package com.github.frederik174.simulation;
 
-import com.github.frederik174.paramter.ReferencePointNames;
-import com.github.frederik174.paramter.SimulationParameter;
+import com.github.frederik174.parameter.ReferencePointNames;
 import com.github.frederik174.utilities.ObjectEvent;
-import com.github.frederik174.utilities.VIN;
+import com.github.frederik174.utilities.vin;
 import com.github.frederik174.utilities.epc;
 import com.github.frederik174.utilities.id;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -35,7 +34,7 @@ public class InlineGate extends SignalTransmitter {
         epcArrayList.add(new epc("urn:jaif:id:obj:" + cycle.vehicle.getPin()));
 
         String action = "OBSERVE";
-        ArrayList<VIN> ILMD = new ArrayList<VIN>();
+        ArrayList<vin> ILMD = new ArrayList<vin>();
         String bizStep = "urn:epcglobal:cbv:bizstep:arriving";
         String disposition = "in_progress";
 
