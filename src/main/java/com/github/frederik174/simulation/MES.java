@@ -1,7 +1,7 @@
 package com.github.frederik174.simulation;
 
 import com.github.frederik174.utilities.ObjectEvent;
-import com.github.frederik174.utilities.VIN;
+import com.github.frederik174.utilities.vin;
 import com.github.frederik174.utilities.epc;
 import com.github.frederik174.utilities.id;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -30,8 +30,8 @@ public class MES extends SignalTransmitter {
 
         String action = "ADD";
 
-        ArrayList<VIN> ILMD = new ArrayList<VIN>();
-        ILMD.add(new VIN("SB164ABN1PE082986"));
+        ArrayList<vin> ILMD = new ArrayList<vin>();
+        ILMD.add(new vin("SB164ABN1PE082986"));
 
         String bizStep = null;
         String disposition = null;

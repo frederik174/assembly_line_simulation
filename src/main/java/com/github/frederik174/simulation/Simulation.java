@@ -3,10 +3,14 @@ package com.github.frederik174.simulation;
 
 import com.github.frederik174.parameter.LayoutParameter;
 import com.github.frederik174.parameter.SimulationParameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class Simulation {
 
     public static void main(String[] args) {
+        //final Logger logger = LoggerFactory.getLogger(Simulation.class);
 
         LayoutParameter params = new LayoutParameter();
 
@@ -30,7 +34,10 @@ public class Simulation {
                 i++;
 
                 Thread.sleep((int)SimulationParameter.CYCLE_DURATION.getValue());
+
+                ;
             } catch (InterruptedException e) {
+                //logger.error("Error while producing: " + e);
                 e.printStackTrace();
                 break;
             }
