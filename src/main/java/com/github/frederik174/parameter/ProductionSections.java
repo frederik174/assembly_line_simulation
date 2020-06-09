@@ -1,12 +1,12 @@
 package com.github.frederik174.parameter;
 
-public enum ReferencePointNames {
-    // names of RTLS reference Points etc.
-    REFERENCE_POINT_H2("12B2A70");
+public enum ProductionSections {
+    // names of production sections
+    ASSEMBLY_SEC_1("12B2AS1");
 
     String idString;
 
-    ReferencePointNames(String idString){
+    ProductionSections(String idString){
         this.idString = idString;
     }
 

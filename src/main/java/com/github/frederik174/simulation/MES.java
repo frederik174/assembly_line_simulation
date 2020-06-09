@@ -21,7 +21,7 @@ public class MES extends SignalTransmitter {
         this.systemId = systemId;
     }
 
-    public ObjectEvent createObjectEvent(Vehicle vehicle, String zone){
+    public ObjectEvent createMasterDataEvent(Vehicle vehicle, String zone){
         String eventTime = Instant.now().atZone(ZoneId.of("Europe/Berlin")).toString().substring(0,29);
         String eventTimeZoneOffset = Instant.now().atZone(ZoneId.of("Europe/Berlin")).getOffset().toString();
 
@@ -31,7 +31,7 @@ public class MES extends SignalTransmitter {
         String action = "ADD";
 
         ArrayList<vin> ILMD = new ArrayList<vin>();
-        ILMD.add(new vin("SB164ABN1PE082986"));
+        ILMD.add(new vin(vehicle.getVin()));
 
         String bizStep = null;
         String disposition = null;
@@ -48,7 +48,7 @@ public class MES extends SignalTransmitter {
     }
 
     public String createPayload(Vehicle vehicle, String zone){
-        ObjectEvent event = createObjectEvent(vehicle, zone);
+        ObjectEvent event = createMasterDataEvent(vehicle, zone);
         StringWriter sw = new StringWriter();
         String eventXmlString = null;
 
@@ -65,7 +65,7 @@ public class MES extends SignalTransmitter {
         return eventXmlString;
     }
 
-    public ProducerRecord<String,String> createObjectEventRecord(String topic, int partition,Vehicle vehicle, String zone){
-        return new ProducerRecord<>(topic, partition, systemId, createPayload(vehicle, zone));
+    public void sendEvent(String topic, Vehicle vehicle, String zone){
+        this.transmitter.send(new ProducerRecord<>(topic, systemId, createPayload(vehicle, zone)));
     }
 }

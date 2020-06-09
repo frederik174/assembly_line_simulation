@@ -5,24 +5,24 @@ import java.time.Instant;
 import java.time.ZoneId;
 
 public class Vehicle {
-    private int assemblySegment = 3;
     private String PIN;
-    private String plantID = "11";
+    private String VIN;
 
-    public Vehicle(int productionNumber){
-        this.PIN = generatePin(productionNumber);
+    public Vehicle(int prodNumber){
+        this.PIN = generatePin(prodNumber);
+        this.VIN = generateVin(prodNumber);
     }
 
-    private String generatePin(int productionNumber){
+    private String generatePin(int prodNumber){
         // production year
         Integer productionYear = Instant.now().atZone(ZoneId.of("Europe/Berlin")).getYear();
 
         // calendar week
         String productionWeek = String.format("%02d", ((Instant.now().atZone(ZoneId.of("Europe/Berlin")).getDayOfYear() + 1) / 7 +1));
         // production number (ongoing)
-        String prodNumber = String.format("%04d", productionNumber);
+        String productionNumber = String.format("%04d", prodNumber);
 
-        String pin = plantID + productionYear.toString() + assemblySegment + productionWeek + prodNumber;
+        String pin = "12" + productionYear.toString() + "3" + productionWeek + productionNumber;
 
         // security number
         Integer securityNumber = calculateSecurityNumber(pin);
@@ -61,5 +61,18 @@ public class Vehicle {
         return securityNumber;
     }
 
+    private String generateVin(int prodNumber){
+        // WMI code (VW2 for Volkswagen Commercial Vehicles with models including T6)
+        // Z is a placeholder
+        // Model code
+        // Model year "L" indicates 2020
+        // plant code "H" indicates Hannover
+        // 7HA -> "Kasten" 7HB -> Kombi/Multivan
+        String productionNumber = String.format("%05d", prodNumber);
+        String vin = "WV2" + "ZZZ" + "7HB" + "ZLH" + productionNumber;
+        return vin;
+    }
+
     public String getPin(){return this.PIN;}
+    public String getVin(){return this.VIN;}
 }

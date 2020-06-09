@@ -15,16 +15,17 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
-public class InlineGate extends SignalTransmitter {
+public class Gate extends SignalTransmitter {
     public String gateId;
     public Cycle cycle;
-    private String bizLocationType;
 
-    public InlineGate(String gateId, Cycle cycle){
+    // constructor for a gate on an assembly line (located within a cycle)
+    public Gate(String gateId, Cycle cycle){
         super();
         this.gateId = gateId;
         this.cycle = cycle;
     }
+
 
     public ObjectEvent createObjectEvent(){
         String eventTime = Instant.now().atZone(ZoneId.of("Europe/Berlin")).toString().substring(0,29);
@@ -35,6 +36,8 @@ public class InlineGate extends SignalTransmitter {
 
         String action = "OBSERVE";
         ArrayList<vin> ILMD = new ArrayList<vin>();
+        ILMD.add(new vin());
+
         String bizStep = "urn:epcglobal:cbv:bizstep:arriving";
         String disposition = "in_progress";
 
@@ -42,8 +45,10 @@ public class InlineGate extends SignalTransmitter {
         readPoint.add(new id("urn:vwg:vwgbv:v1.0:rp:gate:26SUN317559813" + gateId));
 
         ArrayList<id> bizLocation = new ArrayList<id>();
-        bizLocation.add(new id("urn:vwg:vwgbv:v1.0:loc:refpko:25LUN313517870" + ReferencePointNames.REFERENCE_POINT_NAME.getIdString() + "." +
-                refomatPos(cycle.CENTER_X) + "." + refomatPos(cycle.CENTER_Y) + ".0"));
+        bizLocation.add(new id("urn:vwg:vwgbv:v1.0:loc:refpko:25LUN313517870" +
+                ReferencePointNames.REFERENCE_POINT_H2.getIdString() + "." +
+                String.valueOf(cycle.CENTER_X).replace('.',',') + "." +
+                String.valueOf(cycle.CENTER_Y).replace('.',',') + ".0"));
 
         return new ObjectEvent(eventTime,eventTimeZoneOffset,epcArrayList,action,ILMD,bizStep,disposition,readPoint,bizLocation);
     }
@@ -66,11 +71,7 @@ public class InlineGate extends SignalTransmitter {
         return eventXmlString;
     }
 
-    public ProducerRecord<String,String> createObjectEventRecord(String topic, int partition){
-        return new ProducerRecord<>(topic, partition, gateId, createPayload());
-    }
-
-    private String refomatPos(double pos){
-        return String.valueOf(pos).replace('.',',');
+    public void sendEvent(String topic){
+        this.transmitter.send(new ProducerRecord<>(topic, gateId, createPayload()));
     }
 }

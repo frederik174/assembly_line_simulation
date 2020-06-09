@@ -12,13 +12,7 @@ public class SignalTransmitter {
     // Default constructor
     public SignalTransmitter(){
         this.config = new KafkaProperties();
-        this.transmitter = new KafkaProducer<>(config);
-    }
-
-    // Constructor for externally hosted kafka server (AWS or Docker Network)
-    public SignalTransmitter(String bootstrapServer){
-        this.config = new KafkaProperties(bootstrapServer);
-        this.transmitter = new KafkaProducer<>(config);
+        this.transmitter = new KafkaProducer<String, String>(config);
     }
 
     public double[] localToGeoCoordinates(double xPos,double yPos){
