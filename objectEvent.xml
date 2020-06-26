@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectEvent>
+    <eventTime>2019-05-09T13:50:48.209+02:00</eventTime>
+    <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>
+    <epcList>
+        <epc>urn:jaif:id:obj:5I1120196443434</epc>
+    </epcList>
+    <action>OBSERVE</action>
+    <bizStep>urn:epcglobal:cbv:bizstep:arriving</bizStep>
+    <disposition>in_progress</disposition>
+    <readPoint>
+        <id>urn:vwg:vwgbv:v1.0:rp:gate:26SUN317559813RFIDGATE0004</id>
+    </readPoint>
+    <bizLocation>
+        <id>urn:vwg:vwgbv:v1.0:loc:refpla:25L31351787021L22.32,12.1,5.45</id>
+    </bizLocation>
+</objectEvent>

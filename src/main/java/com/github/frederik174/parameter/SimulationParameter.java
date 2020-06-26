@@ -9,7 +9,7 @@ public enum SimulationParameter {
 
     REFERENCE_POINT_LAT(52.41929723315495),
     REFERENCE_POINT_LNG(9.669894576072693),
-    CYCLE_DURATION(5000.00), // in ms
+    CYCLE_DURATION(20000.00), // in ms
     ANGLE(1.235);
 
     double value;
